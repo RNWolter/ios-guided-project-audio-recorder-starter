@@ -10,7 +10,7 @@ import UIKit
 
 @IBDesignable
 public class AudioVisualizer: UIView {
-    
+
     // MARK: IBInspectable Properties
     
     /// The width of a bar in points.

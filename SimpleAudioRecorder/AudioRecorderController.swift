@@ -5,10 +5,12 @@
 //  Created by Paul Solt on 10/1/19.
 //  Copyright © 2019 Lambda, Inc. All rights reserved.
 //
-
+import AVFoundation
 import UIKit
 
 class AudioRecorderController: UIViewController {
+    
+    var audioPlayer: AVAudioPlayer?
     
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var recordButton: UIButton!
@@ -39,6 +41,7 @@ class AudioRecorderController: UIViewController {
                                                           weight: .regular)
         timeRemainingLabel.font = UIFont.monospacedDigitSystemFont(ofSize: timeRemainingLabel.font.pointSize,
                                                                    weight: .regular)
+        loadAudio()
         
         
 	}
@@ -46,7 +49,34 @@ class AudioRecorderController: UIViewController {
     
     // MARK: - Playback
     
+    func loadAudio(){
+        
+        // app bundle is read only folder
+        
+        let songURL = Bundle.main.url(forResource: "piano", withExtension: "mp3")!
+        
+        audioPlayer = try? AVAudioPlayer(contentsOf: songURL) // FIXME..Better error handling needed
+    }
     
+    
+    var isPlaying: Bool {
+        audioPlayer?.isPlaying ?? false
+    }
+    func play(){
+        audioPlayer?.play()
+    }
+    
+    func pause(){
+        audioPlayer?.pause()
+    }
+    
+    func playPause(){
+        if isPlaying {
+            pause()
+        } else {
+            play()
+        }
+    }
     
     // MARK: - Recording
     
@@ -55,7 +85,7 @@ class AudioRecorderController: UIViewController {
     // MARK: - Actions
     
     @IBAction func togglePlayback(_ sender: Any) {
-        
+        playPause()
 	}
     
     @IBAction func updateCurrentTime(_ sender: UISlider) {
