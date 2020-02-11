@@ -45,6 +45,10 @@ class AudioRecorderController: UIViewController {
         
         
 	}
+    private func updateViews(){
+        playButton.isSelected = isPlaying
+    }
+    
     
     
     // MARK: - Playback
@@ -56,6 +60,8 @@ class AudioRecorderController: UIViewController {
         let songURL = Bundle.main.url(forResource: "piano", withExtension: "mp3")!
         
         audioPlayer = try? AVAudioPlayer(contentsOf: songURL) // FIXME..Better error handling needed
+
+        
     }
     
     
@@ -64,10 +70,12 @@ class AudioRecorderController: UIViewController {
     }
     func play(){
         audioPlayer?.play()
+        updateViews()
     }
     
     func pause(){
         audioPlayer?.pause()
+        updateViews()
     }
     
     func playPause(){
@@ -97,3 +105,22 @@ class AudioRecorderController: UIViewController {
     }
 }
 
+extension AudioRecorderController: AVAudioPlayerDelegate {
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool){
+        updateViews()
+    }
+
+    
+    /* if an error occurs while decoding it will be reported to the delegate. */
+  
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?){
+        if let error = error {
+            print("AudioPlayer Error: \(error)")
+        }
+    }
+
+    
+    
+    
+}
